@@ -1,1 +1,3 @@
-volumes
+*.swp
+console-config/redpanda.license
+

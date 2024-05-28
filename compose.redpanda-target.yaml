@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+
+  redpanda-target:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.2
+    container_name: redpanda-target
+    hostname: redpanda-target
+    command:
+      - redpanda start
+      - --smp 1
+      - --mode dev-container
+    ports:
+      - 9192:9192
+      - 9744:9744
+    volumes:
+      - ./redpanda-config/redpanda-target:/etc/redpanda
+#      - ./redpanda-config/redpanda-target/redpanda.yaml:/etc/redpanda/redpanda.yaml
+#      - ./redpanda-config/redpanda-target/.bootstrap.yaml:/etc/redpanda/.bootstrap.yaml
+      - ./redpanda-data/redpanda-target:/var/lib/redpanda/data
+
+  console-target:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: console-target
+    hostname: console-target
+    command: -c '/app/console'
+    entrypoint: /bin/sh
+    volumes:
+    - ./redpanda-config/console-target:/tmp
+    environment:
+      CONFIG_FILEPATH: /tmp/redpanda-console-config.yml
+    ports:
+    - 8180:8180
+    depends_on:
+      - redpanda-target
+

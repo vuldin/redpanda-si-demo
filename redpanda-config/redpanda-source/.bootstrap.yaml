@@ -1,0 +1,9 @@
+cloud_storage_enabled: true
+cloud_storage_region: local
+cloud_storage_access_key: minio
+cloud_storage_secret_key: minio123
+cloud_storage_api_endpoint: minio
+cloud_storage_api_endpoint_port: 9000
+cloud_storage_disable_tls: true
+cloud_storage_bucket: redpanda-source
+cloud_storage_segment_max_upload_interval_sec: 30

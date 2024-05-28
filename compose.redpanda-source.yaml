@@ -1,0 +1,44 @@
+version: '3.7'
+services:
+
+  redpanda-source:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.2
+    container_name: redpanda-source
+    hostname: redpanda-source
+    command:
+      - redpanda start
+      - --smp 1
+      - --mode dev-container
+#      - --set redpanda.cloud_storage_enabled=true
+#      - --set redpanda.cloud_storage_region=local
+#      - --set redpanda.cloud_storage_access_key=minio
+#      - --set redpanda.cloud_storage_secret_key=minio123
+#      - --set redpanda.cloud_storage_api_endpoint=minio
+#      - --set redpanda.cloud_storage_api_endpoint_port=9000
+#      - --set redpanda.cloud_storage_disable_tls=true
+#      - --set redpanda.cloud_storage_bucket=redpanda-source
+#      - --set redpanda.cloud_storage_segment_max_upload_interval_sec=30
+    ports:
+      - 9092:9092
+      - 9644:9644
+    volumes:
+      - ./redpanda-config/redpanda-source:/etc/redpanda
+#      - ./redpanda-config/redpanda-source/redpanda.yaml:/etc/redpanda/redpanda.yaml
+#      - ./redpanda-config/redpanda-source/.bootstrap.yaml:/etc/redpanda/.bootstrap.yaml
+      - ./redpanda-data/redpanda-source:/var/lib/redpanda/data
+
+  console-source:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: console-source
+    hostname: console-source
+    command: -c '/app/console'
+    entrypoint: /bin/sh
+    volumes:
+    - ./redpanda-config/console-source:/tmp
+    environment:
+      CONFIG_FILEPATH: /tmp/redpanda-console-config.yml
+    ports:
+    - 8080:8080
+    depends_on:
+      - redpanda-source
+

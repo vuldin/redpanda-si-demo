@@ -1,0 +1,16 @@
+#licenseFilepath: /tmp/redpanda.license
+server:
+  listenPort: 8080
+kafka:
+  brokers:
+  - "redpanda-source:29092"
+  schemaRegistry:
+    enabled: true
+    urls:
+    - "http://redpanda-source:28081"
+redpanda:
+  adminApi:
+    enabled: true
+    urls:
+    - "http://redpanda-source:9644"
+
